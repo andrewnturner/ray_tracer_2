@@ -2,14 +2,35 @@ use std::{fs::File, io::BufWriter, path::Path};
 
 use image::{Rgb, RgbImage};
 
+use crate::{
+    colour::Colour,
+    geometry::{Point2, Rect, space::TargetSpace},
+    grid::Grid,
+};
+
 pub struct Target {
     width: u32,
     height: u32,
+    film: Grid<Colour>,
 }
 
 impl Target {
     pub fn new(width: u32, height: u32) -> Self {
-        Self { width, height }
+        let film = Grid::create_uniform(width as usize, height as usize, Colour::zero());
+
+        Self {
+            width,
+            height,
+            film,
+        }
+    }
+
+    pub fn rect(&self) -> Rect<TargetSpace, u32> {
+        Rect::new(Point2::new(0, 0), Point2::new(self.width, self.height))
+    }
+
+    pub fn set_pixel(&mut self, pixel: Point2<TargetSpace, u32>, colour: Colour) {
+        self.film.set(pixel.x as usize, pixel.y as usize, colour);
     }
 
     pub fn write_png(&self, path: impl AsRef<Path>) {
@@ -17,7 +38,15 @@ impl Target {
 
         for x in 0..self.width {
             for y in 0..self.height {
-                image.put_pixel(x, y, Rgb([255, 0, 0]));
+                let pixel_colour = self.film.get(x as usize, y as usize);
+
+                let colour = Rgb([
+                    (255.0 * pixel_colour.r) as u8,
+                    (255.0 * pixel_colour.g) as u8,
+                    (255.0 * pixel_colour.b) as u8,
+                ]);
+
+                image.put_pixel(x, y, colour);
             }
         }
 

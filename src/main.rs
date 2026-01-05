@@ -1,4 +1,8 @@
+mod colour;
+mod geometry;
+mod grid;
 mod renderer;
+mod sampler;
 mod scene;
 mod target;
 
