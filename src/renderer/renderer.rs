@@ -1,4 +1,4 @@
-use crate::scene::Camera;
+use crate::camera::Camera;
 use crate::scene::Scene;
 use crate::target::Target;
 

@@ -14,3 +14,13 @@ impl<S, T> Rect<S, T> {
         }
     }
 }
+
+impl<S> Rect<S, u32> {
+    pub fn width(&self) -> u32 {
+        self.bottom_right.x - self.top_left.x
+    }
+
+    pub fn height(&self) -> u32 {
+        self.bottom_right.y - self.top_left.y
+    }
+}

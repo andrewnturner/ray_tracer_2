@@ -1,9 +1,9 @@
 use crate::{
+    camera::Camera,
     geometry::{
         Point2, Point3, Ray, Vector3,
-        space::{SceneSpace, TargetSpace},
+        space::{TargetSpace, WorldSpace},
     },
-    scene::Camera,
 };
 
 pub struct Sampler {
@@ -20,27 +20,29 @@ impl Sampler {
         pixel: Point2<TargetSpace, u32>,
         camera: &Camera,
     ) -> impl Iterator<Item = Sample> {
-        SampleIterator::new(self.samples_per_pixel, pixel)
+        SampleIterator::new(self.samples_per_pixel, pixel, camera)
     }
 }
 
-struct SampleIterator {
+struct SampleIterator<'a> {
     num_samples: u32,
     pixel: Point2<TargetSpace, u32>,
     current_sample: u32,
+    camera: &'a Camera,
 }
 
-impl SampleIterator {
-    fn new(num_samples: u32, pixel: Point2<TargetSpace, u32>) -> Self {
+impl<'a> SampleIterator<'a> {
+    fn new(num_samples: u32, pixel: Point2<TargetSpace, u32>, camera: &'a Camera) -> Self {
         Self {
             num_samples,
             pixel,
             current_sample: 0,
+            camera,
         }
     }
 }
 
-impl Iterator for SampleIterator {
+impl<'a> Iterator for SampleIterator<'a> {
     type Item = Sample;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -51,7 +53,7 @@ impl Iterator for SampleIterator {
         self.current_sample += 1;
 
         let target_point = Point2::new(self.pixel.x as f64, self.pixel.y as f64);
-        let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
+        let ray = self.camera.generate_ray(target_point);
 
         Some(Sample { target_point, ray })
     }
@@ -59,5 +61,5 @@ impl Iterator for SampleIterator {
 
 pub struct Sample {
     pub target_point: Point2<TargetSpace, f64>,
-    pub ray: Ray<SceneSpace, f64>,
+    pub ray: Ray<WorldSpace, f64>,
 }

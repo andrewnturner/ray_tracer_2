@@ -2,4 +2,19 @@
 pub struct TargetSpace;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub struct SceneSpace;
+pub struct WorldSpace;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct ScreenSpace;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct NDCSpace;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct RasterSpace;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct CameraSpace;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct IntermediateSpace;

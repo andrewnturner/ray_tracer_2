@@ -1,5 +1,9 @@
 use std::marker::PhantomData;
 
+use num_traits::Num;
+
+use crate::geometry::Vector3;
+
 #[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
 pub struct Point2<S, T> {
     pub x: T,
@@ -33,5 +37,18 @@ impl<S, T> Point3<S, T> {
             z,
             _phantom: PhantomData,
         }
+    }
+
+    pub fn into_vector(self) -> Vector3<S, T> {
+        Vector3::new(self.x, self.y, self.z)
+    }
+}
+
+impl<S> Point3<S, f64> {
+    pub fn is_close(&self, other: &Point3<S, f64>) -> bool {
+        let tolerance = 1e-6;
+
+        return ((self.x - other.x).abs() < tolerance)
+            && (((self.y - other.y).abs() < tolerance) && ((self.z - other.z).abs() < tolerance));
     }
 }

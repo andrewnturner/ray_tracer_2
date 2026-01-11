@@ -18,3 +18,20 @@ impl<S, T> Vector3<S, T> {
         }
     }
 }
+
+impl<S> Vector3<S, f64> {
+    pub fn len(&self) -> f64 {
+        (self.x * self.x) + (self.y * self.y) + (self.z * self.z)
+    }
+
+    pub fn normalise(&self) -> Self {
+        let len = self.len();
+
+        Self {
+            x: self.x / len,
+            y: self.y / len,
+            z: self.z / len,
+            _phantom: PhantomData,
+        }
+    }
+}
