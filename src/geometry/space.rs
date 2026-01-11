@@ -18,3 +18,9 @@ pub struct CameraSpace;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct IntermediateSpace;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct ParentSpace;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct ObjectSpace;

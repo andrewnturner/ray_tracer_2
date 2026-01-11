@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use std::{marker::PhantomData, ops::Add};
 
 use num_traits::Num;
 
@@ -42,6 +42,15 @@ impl<S, T> Point3<S, T> {
     pub fn into_vector(self) -> Vector3<S, T> {
         Vector3::new(self.x, self.y, self.z)
     }
+
+    pub fn relabel<S2>(self) -> Point3<S2, T> {
+        Point3 {
+            x: self.x,
+            y: self.y,
+            z: self.z,
+            _phantom: PhantomData,
+        }
+    }
 }
 
 impl<S> Point3<S, f64> {
@@ -50,5 +59,18 @@ impl<S> Point3<S, f64> {
 
         return ((self.x - other.x).abs() < tolerance)
             && (((self.y - other.y).abs() < tolerance) && ((self.z - other.z).abs() < tolerance));
+    }
+}
+
+impl<S> Add<Vector3<S, f64>> for Point3<S, f64> {
+    type Output = Point3<S, f64>;
+
+    fn add(self, rhs: Vector3<S, f64>) -> Point3<S, f64> {
+        Point3 {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
+            _phantom: PhantomData,
+        }
     }
 }

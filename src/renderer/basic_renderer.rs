@@ -19,8 +19,12 @@ impl BasicRenderer {
         }
     }
 
-    fn light_intensity(&self, ray: Ray<WorldSpace, f64>, scene: &Scene) -> Colour {
-        Colour::new(1.0, 0.0, 0.0)
+    fn light_intensity(&self, ray: &Ray<WorldSpace, f64>, scene: &Scene) -> Colour {
+        if let Some(hit_record) = scene.intersect(ray) {
+            Colour::new(1.0, 0.0, 0.0)
+        } else {
+            Colour::new(0.0, 1.0, 0.0)
+        }
     }
 }
 
@@ -31,16 +35,12 @@ impl Renderer for BasicRenderer {
         for x in target_rect.top_left.x..target_rect.bottom_right.x {
             for y in target_rect.top_left.y..target_rect.bottom_right.y {
                 let current_pixel = Point2::new(x, y);
-                let current_pixel_f64 = Point2::new(x as f64, y as f64);
-
-                let ray = camera.generate_ray(current_pixel_f64);
-                println!("x={:?}, y={:?}, ray={:?}", x, y, ray);
 
                 let mut pixel_colour = Colour::zero();
                 let mut sample_count = 0;
                 for sample in self.sampler.sample_pixel(current_pixel, camera) {
                     let ray = sample.ray;
-                    let intensity = self.light_intensity(ray, scene);
+                    let intensity = self.light_intensity(&ray, scene);
 
                     pixel_colour += intensity;
                     sample_count += 1;
