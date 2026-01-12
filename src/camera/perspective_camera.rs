@@ -18,7 +18,7 @@ pub struct PerspectiveCamera {
 }
 
 impl PerspectiveCamera {
-    pub fn new(target: &Target, window: Rect<ScreenSpace, u32>) -> Self {
+    pub fn new(target: &Target, window: Rect<ScreenSpace, i32>) -> Self {
         let world_to_camera = Transform::identity();
 
         let camera_to_screen = Transform::perspective(PI / 3.0, 0.1, 1_000.0);

@@ -31,11 +31,20 @@ impl Sphere {
         }
 
         let sqrt_d = d.sqrt();
-        let t = (-b - sqrt_d) / (2.0 * a);
+        let t = {
+            let t_minus = (-b - sqrt_d) / (2.0 * a);
+            if t_minus < 0.0 {
+                (-b + sqrt_d) / (2.0 * a)
+            } else {
+                t_minus
+            }
+        };
 
         let p = ray.at(t);
 
-        Some(HitRecord::new(p))
+        let normal = p.into_vector().normalise();
+
+        Some(HitRecord::new(p, normal))
     }
 }
 
@@ -46,13 +55,34 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_intersect() {
+    fn test_sphere_intersect_outside() {
         let ray = Ray::new(Point3::new(-5.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
         let sphere = Sphere::new(1.0);
 
         let hit = sphere.intersect(&ray).unwrap();
 
-        let expected = HitRecord::new(Point3::new(-1.0, 0.0, 0.0));
+        let expected = HitRecord::new(Point3::new(-1.0, 0.0, 0.0), Vector3::new(-1.0, 0.0, 0.0));
         assert!(hit.is_close(&expected));
+    }
+
+    #[test]
+    fn test_sphere_intersect_inside() {
+        let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
+        let sphere = Sphere::new(2.0);
+
+        let hit = sphere.intersect(&ray).unwrap();
+
+        let expected = HitRecord::new(Point3::new(2.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
+        assert!(hit.is_close(&expected));
+    }
+
+    #[test]
+    fn test_sphere_intersect_miss() {
+        let ray = Ray::new(Point3::new(-5.0, 2.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
+        let sphere = Sphere::new(1.0);
+
+        let hit = sphere.intersect(&ray);
+
+        assert!(hit.is_none());
     }
 }

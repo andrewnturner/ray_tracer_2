@@ -24,3 +24,13 @@ impl<S> Rect<S, u32> {
         self.bottom_right.y - self.top_left.y
     }
 }
+
+impl<S> Rect<S, i32> {
+    pub fn width(&self) -> u32 {
+        (self.bottom_right.x - self.top_left.x) as u32
+    }
+
+    pub fn height(&self) -> u32 {
+        (self.bottom_right.y - self.top_left.y) as u32
+    }
+}

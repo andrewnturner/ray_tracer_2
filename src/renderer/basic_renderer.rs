@@ -21,7 +21,8 @@ impl BasicRenderer {
 
     fn light_intensity(&self, ray: &Ray<WorldSpace, f64>, scene: &Scene) -> Colour {
         if let Some(hit_record) = scene.intersect(ray) {
-            Colour::new(1.0, 0.0, 0.0)
+            let f = ray.direction.dot(hit_record.normal.relabel()); // TODO convert to world space
+            Colour::new(f, 0.0, 0.0)
         } else {
             Colour::new(0.0, 1.0, 0.0)
         }

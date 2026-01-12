@@ -21,11 +21,11 @@ use crate::renderer::Renderer;
 use crate::scene::ElementInstance;
 
 fn build_demo_scene_and_camera(target: &Target) -> (Scene, Camera) {
-    let sphere = Element::Sphere(Sphere::new(4.95));
+    let sphere = Element::Sphere(Sphere::new(4.0));
     let sphere_instance = ElementInstance::new(sphere, Transform::translate(0.0, 0.0, 5.0));
     let scene = Scene::new(sphere_instance);
 
-    let screen = Rect::new(Point2::new(0, 0), Point2::new(120, 100));
+    let screen = Rect::new(Point2::new(-5, -5), Point2::new(5, 5));
     let camera = Camera::PerspectiveCamera(PerspectiveCamera::new(target, screen));
 
     (scene, camera)

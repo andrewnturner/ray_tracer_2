@@ -1,3 +1,5 @@
+use rand::{Rng, rng};
+
 use crate::{
     camera::Camera,
     geometry::{
@@ -46,13 +48,18 @@ impl<'a> Iterator for SampleIterator<'a> {
     type Item = Sample;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.current_sample >= 1 {
+        if self.current_sample >= self.num_samples {
             return None;
         }
 
         self.current_sample += 1;
 
-        let target_point = Point2::new(self.pixel.x as f64, self.pixel.y as f64);
+        let mut rng = rng();
+
+        let target_point = Point2::new(
+            (self.pixel.x as f64) + rng.random::<f64>(),
+            (self.pixel.y as f64) + rng.random::<f64>(),
+        );
         let ray = self.camera.generate_ray(target_point);
 
         Some(Sample { target_point, ray })

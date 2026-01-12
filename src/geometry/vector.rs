@@ -51,6 +51,13 @@ impl<S> Vector3<S, f64> {
     pub fn dot(&self, rhs: Vector3<S, f64>) -> f64 {
         (self.x * rhs.x) + (self.y * rhs.y) + (self.z * rhs.z)
     }
+
+    pub fn is_close(&self, other: &Vector3<S, f64>) -> bool {
+        let tolerance = 1e-6;
+
+        return ((self.x - other.x).abs() < tolerance)
+            && (((self.y - other.y).abs() < tolerance) && ((self.z - other.z).abs() < tolerance));
+    }
 }
 
 impl<S> Mul<Vector3<S, f64>> for f64 {
