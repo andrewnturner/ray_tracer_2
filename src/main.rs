@@ -14,13 +14,13 @@ use scene::Scene;
 use scene::element::{Element, Sphere};
 use target::Target;
 
-use crate::camera::PerspectiveCamera;
+use crate::camera::{CameraInstance, PerspectiveCamera};
 use crate::geometry::{Point2, Rect, Transform};
 use crate::renderer::BasicRenderer;
 use crate::renderer::Renderer;
 use crate::scene::ElementInstance;
 
-fn build_demo_scene_and_camera(target: &Target) -> (Scene, Camera) {
+fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
     let sphere = Element::Sphere(Sphere::new(4.0));
     let sphere_instance = ElementInstance::new(sphere, Transform::translate(0.0, 0.0, 10.0));
     let scene = Scene::new(sphere_instance);
@@ -32,17 +32,18 @@ fn build_demo_scene_and_camera(target: &Target) -> (Scene, Camera) {
     );
 
     let camera = Camera::PerspectiveCamera(PerspectiveCamera::new(target, screen));
+    let camera_instance = CameraInstance::new(camera, Transform::translate(1.0, 0.0, 0.0));
 
-    (scene, camera)
+    (scene, camera_instance)
 }
 
 fn main() {
     let mut target = Target::new(80, 60);
 
-    let (scene, camera) = build_demo_scene_and_camera(&target);
+    let (scene, camera_instance) = build_demo_scene_and_camera(&target);
 
     let renderer = BasicRenderer::new();
-    renderer.render(&scene, &camera, &mut target);
+    renderer.render(&scene, &camera_instance, &mut target);
 
     target.write_png("out/demo.png");
 }

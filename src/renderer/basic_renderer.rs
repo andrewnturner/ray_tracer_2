@@ -1,5 +1,5 @@
 use crate::{
-    camera::Camera,
+    camera::{Camera, CameraInstance},
     colour::Colour,
     geometry::{Point2, Ray, space::WorldSpace},
     renderer::Renderer,
@@ -30,7 +30,7 @@ impl BasicRenderer {
 }
 
 impl Renderer for BasicRenderer {
-    fn render(&self, scene: &Scene, camera: &Camera, target: &mut Target) {
+    fn render(&self, scene: &Scene, camera_instance: &CameraInstance, target: &mut Target) {
         let target_rect = target.rect();
 
         for x in target_rect.top_left.x..target_rect.bottom_right.x {
@@ -39,9 +39,13 @@ impl Renderer for BasicRenderer {
 
                 let mut pixel_colour = Colour::zero();
                 let mut sample_count = 0;
-                for sample in self.sampler.sample_pixel(current_pixel, camera) {
-                    let ray = sample.ray;
-                    let intensity = self.light_intensity(&ray, scene);
+                for sample in self
+                    .sampler
+                    .sample_pixel(current_pixel, &camera_instance.camera)
+                {
+                    let ray_camera = sample.ray;
+                    let ray_world = camera_instance.world_to_camera.clone().inverse() * ray_camera;
+                    let intensity = self.light_intensity(&ray_world, scene);
 
                     pixel_colour += intensity;
                     sample_count += 1;

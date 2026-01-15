@@ -12,15 +12,12 @@ use crate::{
 };
 
 pub struct PerspectiveCamera {
-    world_to_camera: Transform<WorldSpace, CameraSpace>,
     camera_to_screen: Transform<CameraSpace, ScreenSpace>,
     screen_to_raster: Transform<ScreenSpace, RasterSpace>,
 }
 
 impl PerspectiveCamera {
     pub fn new(target: &Target, window: Rect<ScreenSpace, f64>) -> Self {
-        let world_to_camera = Transform::identity();
-
         let camera_to_screen = Transform::perspective(PI / 2.0, 0.1, 1_000.0);
 
         let screen_to_raster =
@@ -36,13 +33,12 @@ impl PerspectiveCamera {
                 );
 
         Self {
-            world_to_camera,
             camera_to_screen,
             screen_to_raster,
         }
     }
 
-    pub fn generate_ray(&self, target_point: Point2<TargetSpace, f64>) -> Ray<WorldSpace, f64> {
+    pub fn generate_ray(&self, target_point: Point2<TargetSpace, f64>) -> Ray<CameraSpace, f64> {
         let p_raster = Point3::new(target_point.x, target_point.y, 0.0);
         let p_screen = self.screen_to_raster.clone().inverse() * p_raster;
         let p_camera = self.camera_to_screen.clone().inverse() * p_screen;
@@ -52,6 +48,6 @@ impl PerspectiveCamera {
             p_camera.into_vector().normalise(),
         );
 
-        self.world_to_camera.clone().inverse() * ray_camera
+        ray_camera
     }
 }

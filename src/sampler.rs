@@ -4,7 +4,7 @@ use crate::{
     camera::Camera,
     geometry::{
         Point2, Point3, Ray, Vector3,
-        space::{TargetSpace, WorldSpace},
+        space::{CameraSpace, TargetSpace, WorldSpace},
     },
 };
 
@@ -68,5 +68,5 @@ impl<'a> Iterator for SampleIterator<'a> {
 
 pub struct Sample {
     pub target_point: Point2<TargetSpace, f64>,
-    pub ray: Ray<WorldSpace, f64>,
+    pub ray: Ray<CameraSpace, f64>,
 }
