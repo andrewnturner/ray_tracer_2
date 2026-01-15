@@ -18,24 +18,22 @@ pub struct PerspectiveCamera {
 }
 
 impl PerspectiveCamera {
-    pub fn new(target: &Target, window: Rect<ScreenSpace, i32>) -> Self {
+    pub fn new(target: &Target, window: Rect<ScreenSpace, f64>) -> Self {
         let world_to_camera = Transform::identity();
 
-        let camera_to_screen = Transform::perspective(PI / 3.0, 0.1, 1_000.0);
+        let camera_to_screen = Transform::perspective(PI / 2.0, 0.1, 1_000.0);
 
-        let screen_to_raster = Transform::<IntermediateSpace, RasterSpace>::scale(
-            target.width as f64,
-            target.height as f64,
-            1.0,
-        ) * Transform::scale(
-            1.0 / window.width() as f64,
-            1.0 / window.height() as f64,
-            1.0,
-        ) * Transform::<ScreenSpace, IntermediateSpace>::translate(
-            -(window.top_left.x as f64),
-            -(window.top_left.y as f64),
-            0.0,
-        );
+        let screen_to_raster =
+            Transform::<IntermediateSpace, RasterSpace>::scale(
+                target.width as f64,
+                target.height as f64,
+                1.0,
+            ) * Transform::scale(1.0 / window.width(), 1.0 / window.height(), 1.0)
+                * Transform::<ScreenSpace, IntermediateSpace>::translate(
+                    -(window.top_left.x as f64),
+                    -(window.top_left.y as f64),
+                    0.0,
+                );
 
         Self {
             world_to_camera,

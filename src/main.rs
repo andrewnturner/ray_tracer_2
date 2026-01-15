@@ -22,10 +22,15 @@ use crate::scene::ElementInstance;
 
 fn build_demo_scene_and_camera(target: &Target) -> (Scene, Camera) {
     let sphere = Element::Sphere(Sphere::new(4.0));
-    let sphere_instance = ElementInstance::new(sphere, Transform::translate(0.0, 0.0, 5.0));
+    let sphere_instance = ElementInstance::new(sphere, Transform::translate(0.0, 0.0, 10.0));
     let scene = Scene::new(sphere_instance);
 
-    let screen = Rect::new(Point2::new(-5, -5), Point2::new(5, 5));
+    let aspect_ratio = (target.width as f64) / (target.height as f64);
+    let screen = Rect::new(
+        Point2::new(-aspect_ratio, -1.0),
+        Point2::new(aspect_ratio, 1.0),
+    );
+
     let camera = Camera::PerspectiveCamera(PerspectiveCamera::new(target, screen));
 
     (scene, camera)
