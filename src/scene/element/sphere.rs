@@ -1,5 +1,7 @@
+use std::f64::consts::PI;
+
 use crate::{
-    geometry::{Ray, space::ObjectSpace},
+    geometry::{Point2, Ray, space::ObjectSpace},
     hit_record::HitRecord,
     material::Material,
 };
@@ -46,47 +48,80 @@ impl Sphere {
 
         let normal = p.into_vector().normalise();
 
-        Some(HitRecord::new(p, normal, self.material.clone()))
+        let theta = p.z.acos();
+        let phi = p.y.atan2(p.x);
+        let texture_point = Point2::new(theta / PI, phi / (2.0 * PI));
+
+        Some(HitRecord::new(
+            p,
+            normal,
+            self.material.clone(),
+            texture_point,
+        ))
     }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::{
+        colour::Colour,
         geometry::{Point3, Vector3},
         material::Matte,
+        texture::{ConstantTexture, Texture},
     };
 
     use super::*;
 
     #[test]
     fn test_sphere_intersect_outside() {
-        let m = Material::Matte(Matte::new(1.0));
+        let m = Material::Matte(Matte::new(
+            1.0,
+            Texture::Constant(ConstantTexture::new(Colour::new(1.0, 0.0, 0.0))),
+        ));
         let ray = Ray::new(Point3::new(-5.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
         let sphere = Sphere::new(1.0, m.clone());
 
         let hit = sphere.intersect(&ray).unwrap();
 
-        let expected = HitRecord::new(Point3::new(-1.0, 0.0, 0.0), Vector3::new(-1.0, 0.0, 0.0), m);
+        let expected = HitRecord::new(
+            Point3::new(-1.0, 0.0, 0.0),
+            Vector3::new(-1.0, 0.0, 0.0),
+            m,
+            Point2::new(0.5, 0.5),
+        );
         assert!(hit.is_close(&expected));
     }
 
     #[test]
     fn test_sphere_intersect_inside() {
-        let m = Material::Matte(Matte::new(1.0));
+        let m = Material::Matte(Matte::new(
+            1.0,
+            Texture::Constant(ConstantTexture::new(Colour::new(1.0, 0.0, 0.0))),
+        ));
         let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
         let sphere = Sphere::new(2.0, m.clone());
 
         let hit = sphere.intersect(&ray).unwrap();
 
-        let expected = HitRecord::new(Point3::new(2.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0), m);
+        let expected = HitRecord::new(
+            Point3::new(2.0, 0.0, 0.0),
+            Vector3::new(1.0, 0.0, 0.0),
+            m,
+            Point2::new(0.5, 0.0),
+        );
         assert!(hit.is_close(&expected));
     }
 
     #[test]
     fn test_sphere_intersect_miss() {
         let ray = Ray::new(Point3::new(-5.0, 2.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
-        let sphere = Sphere::new(1.0, Material::Matte(Matte::new(1.0)));
+        let sphere = Sphere::new(
+            1.0,
+            Material::Matte(Matte::new(
+                1.0,
+                Texture::Constant(ConstantTexture::new(Colour::new(1.0, 0.0, 0.0))),
+            )),
+        );
 
         let hit = sphere.intersect(&ray);
 

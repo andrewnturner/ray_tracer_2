@@ -26,7 +26,10 @@ impl BasicRenderer {
 
         if let Some(hit_record) = scene.intersect(ray) {
             if let Some(scattered_ray) = hit_record.material.scatter(&hit_record) {
-                let attentuation = Colour::new(1.0, 0.0, 0.0);
+                let attentuation = hit_record
+                    .material
+                    .texture()
+                    .query(hit_record.texture_point);
                 let scattered = self.trace(&scattered_ray, &scene, depth - 1);
 
                 let result = Colour::new(

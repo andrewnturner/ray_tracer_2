@@ -21,6 +21,14 @@ impl<S, T> Point2<S, T> {
     }
 }
 
+impl<S> Point2<S, f64> {
+    pub fn is_close(&self, other: &Point2<S, f64>) -> bool {
+        let tolerance = 1e-6;
+
+        return ((self.x - other.x).abs() < tolerance) && ((self.y - other.y).abs() < tolerance);
+    }
+}
+
 #[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
 pub struct Point3<S, T> {
     pub x: T,

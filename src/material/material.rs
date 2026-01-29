@@ -2,6 +2,7 @@ use crate::{
     geometry::{Ray, space::WorldSpace},
     hit_record::HitRecord,
     material::Matte,
+    texture::Texture,
 };
 
 #[derive(Clone)]
@@ -12,6 +13,12 @@ impl Material {
     pub fn scatter(&self, hit_record: &HitRecord) -> Option<Ray<WorldSpace, f64>> {
         match &self {
             Self::Matte(m) => m.scatter(hit_record),
+        }
+    }
+
+    pub fn texture(&self) -> &Texture {
+        match &self {
+            Self::Matte(m) => &m.texture,
         }
     }
 }

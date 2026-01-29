@@ -2,16 +2,21 @@ use crate::{
     geometry::{Ray, space::WorldSpace},
     hit_record::HitRecord,
     random::random_in_unit_sphere,
+    texture::Texture,
 };
 
 #[derive(Clone)]
 pub struct Matte {
     diffuse_reflection: f64,
+    pub texture: Texture,
 }
 
 impl Matte {
-    pub fn new(diffuse_reflection: f64) -> Self {
-        Self { diffuse_reflection }
+    pub fn new(diffuse_reflection: f64, texture: Texture) -> Self {
+        Self {
+            diffuse_reflection,
+            texture,
+        }
     }
 
     pub fn scatter(&self, hit_record: &HitRecord) -> Option<Ray<WorldSpace, f64>> {

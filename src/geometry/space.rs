@@ -24,3 +24,6 @@ pub struct ParentSpace;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ObjectSpace;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct TextureSpace;
