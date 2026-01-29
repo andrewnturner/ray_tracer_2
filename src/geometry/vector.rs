@@ -1,4 +1,7 @@
-use std::{marker::PhantomData, ops::Mul};
+use std::{
+    marker::PhantomData,
+    ops::{Add, Mul},
+};
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
 pub struct Vector3<S, T> {
@@ -68,6 +71,19 @@ impl<S> Mul<Vector3<S, f64>> for f64 {
             x: self * rhs.x,
             y: self * rhs.y,
             z: self * rhs.z,
+            _phantom: PhantomData,
+        }
+    }
+}
+
+impl<S> Add for Vector3<S, f64> {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self {
+        Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
             _phantom: PhantomData,
         }
     }

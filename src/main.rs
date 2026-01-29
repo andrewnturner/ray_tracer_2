@@ -3,7 +3,9 @@ mod colour;
 mod geometry;
 mod grid;
 mod hit_record;
+mod material;
 mod matrix;
+mod random;
 mod renderer;
 mod sampler;
 mod scene;
@@ -16,12 +18,13 @@ use target::Target;
 
 use crate::camera::{CameraInstance, PerspectiveCamera};
 use crate::geometry::{Point2, Rect, Transform};
+use crate::material::{Material, Matte};
 use crate::renderer::BasicRenderer;
 use crate::renderer::Renderer;
 use crate::scene::ElementInstance;
 
 fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
-    let sphere = Element::Sphere(Sphere::new(4.0));
+    let sphere = Element::Sphere(Sphere::new(4.0, Material::Matte(Matte::new(1.0))));
     let sphere_instance = ElementInstance::new(sphere, Transform::translate(0.0, 0.0, 10.0));
     let scene = Scene::new(sphere_instance);
 
@@ -38,7 +41,7 @@ fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
 }
 
 fn main() {
-    let mut target = Target::new(80, 60);
+    let mut target = Target::new(160, 120);
 
     let (scene, camera_instance) = build_demo_scene_and_camera(&target);
 

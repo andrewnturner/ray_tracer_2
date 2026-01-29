@@ -1,7 +1,7 @@
 use crate::{
     camera::{Camera, CameraInstance},
     colour::Colour,
-    geometry::{Point2, Ray, space::WorldSpace},
+    geometry::{Point2, Ray, Vector3, space::WorldSpace},
     renderer::Renderer,
     sampler::Sampler,
     scene::Scene,
@@ -15,17 +15,43 @@ pub struct BasicRenderer {
 impl BasicRenderer {
     pub fn new() -> Self {
         Self {
-            sampler: Sampler::new(10),
+            sampler: Sampler::new(1000),
+        }
+    }
+
+    fn trace(&self, ray: &Ray<WorldSpace, f64>, scene: &Scene, depth: u32) -> Colour {
+        if depth <= 0 {
+            return Colour::zero();
+        }
+
+        if let Some(hit_record) = scene.intersect(ray) {
+            if let Some(scattered_ray) = hit_record.material.scatter(&hit_record) {
+                let attentuation = Colour::new(1.0, 0.0, 0.0);
+                let scattered = self.trace(&scattered_ray, &scene, depth - 1);
+
+                let result = Colour::new(
+                    scattered.r * attentuation.r,
+                    scattered.g * attentuation.g,
+                    scattered.b * attentuation.b,
+                );
+
+                result
+            } else {
+                Colour::zero()
+            }
+        } else {
+            let ambient_direction = Vector3::new(1.0, 1.0, 1.0).normalise();
+            let power = ray.direction.dot(ambient_direction);
+            if power > 0.0 {
+                power * Colour::new(0.5, 0.5, 0.5)
+            } else {
+                Colour::zero()
+            }
         }
     }
 
     fn light_intensity(&self, ray: &Ray<WorldSpace, f64>, scene: &Scene) -> Colour {
-        if let Some(hit_record) = scene.intersect(ray) {
-            let f = ray.direction.dot(hit_record.normal.relabel()); // TODO convert to world space
-            Colour::new(f, 0.0, 0.0)
-        } else {
-            Colour::new(0.0, 1.0, 0.0)
-        }
+        self.trace(ray, scene, 5)
     }
 }
 

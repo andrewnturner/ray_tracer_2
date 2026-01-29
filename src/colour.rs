@@ -1,4 +1,4 @@
-use std::ops::{AddAssign, DivAssign};
+use std::ops::{Add, AddAssign, DivAssign, Mul};
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Colour {
@@ -21,6 +21,18 @@ impl Colour {
     }
 }
 
+impl Add for Colour {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self {
+        Self {
+            r: self.r + rhs.r,
+            g: self.g + rhs.g,
+            b: self.b + rhs.b,
+        }
+    }
+}
+
 impl AddAssign for Colour {
     fn add_assign(&mut self, rhs: Self) {
         self.r += rhs.r;
@@ -34,5 +46,13 @@ impl DivAssign<f64> for Colour {
         self.r /= rhs;
         self.g /= rhs;
         self.b /= rhs;
+    }
+}
+
+impl Mul<Colour> for f64 {
+    type Output = Colour;
+
+    fn mul(self, rhs: Colour) -> Colour {
+        Colour::new(rhs.r * self, rhs.g * self, rhs.b * self)
     }
 }
