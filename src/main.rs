@@ -24,18 +24,48 @@ use crate::material::{Material, Matte};
 use crate::renderer::BasicRenderer;
 use crate::renderer::Renderer;
 use crate::scene::ElementInstance;
+use crate::scene::element::ElementList;
 use crate::texture::{ConstantTexture, Texture};
 
 fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
-    let sphere = Element::Sphere(Sphere::new(
+    let blue_sphere = Element::Sphere(Sphere::new(
         4.0,
         Material::Matte(Matte::new(
             1.0,
             Texture::Constant(ConstantTexture::new(Colour::new(0.0, 0.0, 1.0))),
         )),
     ));
-    let sphere_instance = ElementInstance::new(sphere, Transform::translate(0.0, 0.0, 10.0));
-    let scene = Scene::new(sphere_instance);
+    let blue_sphere_instance =
+        ElementInstance::new(blue_sphere, Transform::translate(0.0, -4.0, 10.0));
+
+    let red_sphere = Element::Sphere(Sphere::new(
+        3.0,
+        Material::Matte(Matte::new(
+            1.0,
+            Texture::Constant(ConstantTexture::new(Colour::new(1.0, 0.0, 0.0))),
+        )),
+    ));
+    let red_sphere_instance =
+        ElementInstance::new(red_sphere, Transform::translate(7.0, -3.0, 10.0));
+
+    let ground_sphere = Element::Sphere(Sphere::new(
+        10.0,
+        Material::Matte(Matte::new(
+            1.0,
+            Texture::Constant(ConstantTexture::new(Colour::new(0.0, 1.0, 0.0))),
+        )),
+    ));
+    let ground_sphere_instance =
+        ElementInstance::new(ground_sphere, Transform::translate(0.0, 10.0, 10.0));
+
+    let element_list = Element::ElementList(ElementList::new(vec![
+        blue_sphere_instance,
+        red_sphere_instance,
+        ground_sphere_instance,
+    ]));
+    let element_list_instance = ElementInstance::new(element_list, Transform::identity());
+
+    let scene = Scene::new(element_list_instance);
 
     let aspect_ratio = (target.width as f64) / (target.height as f64);
     let screen = Rect::new(

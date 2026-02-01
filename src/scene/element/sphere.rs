@@ -57,6 +57,7 @@ impl Sphere {
             normal,
             self.material.clone(),
             texture_point,
+            t,
         ))
     }
 }
@@ -88,6 +89,7 @@ mod tests {
             Vector3::new(-1.0, 0.0, 0.0),
             m,
             Point2::new(0.5, 0.5),
+            4.0,
         );
         assert!(hit.is_close(&expected));
     }
@@ -108,6 +110,7 @@ mod tests {
             Vector3::new(1.0, 0.0, 0.0),
             m,
             Point2::new(0.5, 0.0),
+            2.0,
         );
         assert!(hit.is_close(&expected));
     }

@@ -15,7 +15,7 @@ pub struct BasicRenderer {
 impl BasicRenderer {
     pub fn new() -> Self {
         Self {
-            sampler: Sampler::new(1000),
+            sampler: Sampler::new(20),
         }
     }
 
