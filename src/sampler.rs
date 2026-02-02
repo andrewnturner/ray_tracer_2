@@ -4,7 +4,7 @@ use crate::{
     camera::Camera,
     geometry::{
         Point2, Point3, Ray, Vector3,
-        space::{CameraSpace, TargetSpace, WorldSpace},
+        space::{CameraSpace, RasterSpace, WorldSpace},
     },
 };
 
@@ -19,7 +19,7 @@ impl Sampler {
 
     pub fn sample_pixel(
         &self,
-        pixel: Point2<TargetSpace, u32>,
+        pixel: Point2<RasterSpace, u32>,
         camera: &Camera,
     ) -> impl Iterator<Item = Sample> {
         SampleIterator::new(self.samples_per_pixel, pixel, camera)
@@ -28,13 +28,13 @@ impl Sampler {
 
 struct SampleIterator<'a> {
     num_samples: u32,
-    pixel: Point2<TargetSpace, u32>,
+    pixel: Point2<RasterSpace, u32>,
     current_sample: u32,
     camera: &'a Camera,
 }
 
 impl<'a> SampleIterator<'a> {
-    fn new(num_samples: u32, pixel: Point2<TargetSpace, u32>, camera: &'a Camera) -> Self {
+    fn new(num_samples: u32, pixel: Point2<RasterSpace, u32>, camera: &'a Camera) -> Self {
         Self {
             num_samples,
             pixel,
@@ -67,6 +67,6 @@ impl<'a> Iterator for SampleIterator<'a> {
 }
 
 pub struct Sample {
-    pub target_point: Point2<TargetSpace, f64>,
+    pub target_point: Point2<RasterSpace, f64>,
     pub ray: Ray<CameraSpace, f64>,
 }

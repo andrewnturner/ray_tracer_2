@@ -6,16 +6,16 @@ mod hit_record;
 mod material;
 mod matrix;
 mod random;
+mod raster;
 mod renderer;
 mod sampler;
 mod scene;
-mod target;
 mod texture;
 
 use camera::Camera;
+use raster::Raster;
 use scene::Scene;
 use scene::element::{Element, Sphere};
-use target::Target;
 
 use crate::camera::{CameraInstance, PerspectiveCamera};
 use crate::colour::Colour;
@@ -27,7 +27,7 @@ use crate::scene::ElementInstance;
 use crate::scene::element::ElementList;
 use crate::texture::{ConstantTexture, Texture};
 
-fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
+fn build_demo_scene_and_camera(target: &Raster) -> (Scene, CameraInstance) {
     let blue_sphere = Element::Sphere(Sphere::new(
         4.0,
         Material::Matte(Matte::new(
@@ -36,7 +36,7 @@ fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
         )),
     ));
     let blue_sphere_instance =
-        ElementInstance::new(blue_sphere, Transform::translate(0.0, -4.0, 10.0));
+        ElementInstance::new(blue_sphere, Transform::translate(0.0, 4.0, 10.0));
 
     let red_sphere = Element::Sphere(Sphere::new(
         3.0,
@@ -46,7 +46,7 @@ fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
         )),
     ));
     let red_sphere_instance =
-        ElementInstance::new(red_sphere, Transform::translate(7.0, -3.0, 10.0));
+        ElementInstance::new(red_sphere, Transform::translate(7.0, 3.0, 10.0));
 
     let ground_sphere = Element::Sphere(Sphere::new(
         10.0,
@@ -56,7 +56,7 @@ fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
         )),
     ));
     let ground_sphere_instance =
-        ElementInstance::new(ground_sphere, Transform::translate(0.0, 10.0, 10.0));
+        ElementInstance::new(ground_sphere, Transform::translate(0.0, -10.0, 10.0));
 
     let element_list = Element::ElementList(ElementList::new(vec![
         blue_sphere_instance,
@@ -72,6 +72,7 @@ fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
         Point2::new(-aspect_ratio, -1.0),
         Point2::new(aspect_ratio, 1.0),
     );
+    println!("screen: {:?}", screen);
 
     let camera = Camera::PerspectiveCamera(PerspectiveCamera::new(target, screen));
     let camera_instance = CameraInstance::new(camera, Transform::translate(1.0, 0.0, 0.0));
@@ -80,7 +81,7 @@ fn build_demo_scene_and_camera(target: &Target) -> (Scene, CameraInstance) {
 }
 
 fn main() {
-    let mut target = Target::new(80, 60);
+    let mut target = Raster::new(80, 60);
 
     let (scene, camera_instance) = build_demo_scene_and_camera(&target);
 

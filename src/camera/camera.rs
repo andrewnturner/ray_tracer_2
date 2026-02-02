@@ -1,6 +1,6 @@
 use crate::geometry::{
     Point2, Ray, Transform,
-    space::{CameraSpace, TargetSpace, WorldSpace},
+    space::{CameraSpace, RasterSpace, WorldSpace},
 };
 
 use super::perspective_camera::PerspectiveCamera;
@@ -10,7 +10,7 @@ pub enum Camera {
 }
 
 impl Camera {
-    pub fn generate_ray(&self, target_point: Point2<TargetSpace, f64>) -> Ray<CameraSpace, f64> {
+    pub fn generate_ray(&self, target_point: Point2<RasterSpace, f64>) -> Ray<CameraSpace, f64> {
         match self {
             Self::PerspectiveCamera(c) => c.generate_ray(target_point),
         }

@@ -1,10 +1,10 @@
-use std::{marker::PhantomData, ops::Add};
+use std::{fmt, marker::PhantomData, ops::Add};
 
 use num_traits::Num;
 
 use crate::geometry::Vector3;
 
-#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Point2<S, T> {
     pub x: T,
     pub y: T,
@@ -29,7 +29,16 @@ impl<S> Point2<S, f64> {
     }
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+impl<S, T> fmt::Debug for Point2<S, T>
+where
+    T: fmt::Debug,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "({:?}, {:?})", self.x, self.y)
+    }
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Point3<S, T> {
     pub x: T,
     pub y: T,
@@ -80,5 +89,14 @@ impl<S> Add<Vector3<S, f64>> for Point3<S, f64> {
             z: self.z + rhs.z,
             _phantom: PhantomData,
         }
+    }
+}
+
+impl<S, T> fmt::Debug for Point3<S, T>
+where
+    T: fmt::Debug,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "({:?}, {:?}, {:?})", self.x, self.y, self.z)
     }
 }

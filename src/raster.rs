@@ -4,17 +4,17 @@ use image::{Rgb, RgbImage};
 
 use crate::{
     colour::Colour,
-    geometry::{Point2, Rect, space::TargetSpace},
+    geometry::{Point2, Rect, space::RasterSpace},
     grid::Grid,
 };
 
-pub struct Target {
+pub struct Raster {
     pub width: u32,
     pub height: u32,
     film: Grid<Colour>,
 }
 
-impl Target {
+impl Raster {
     pub fn new(width: u32, height: u32) -> Self {
         let film = Grid::create_uniform(width as usize, height as usize, Colour::zero());
 
@@ -25,11 +25,11 @@ impl Target {
         }
     }
 
-    pub fn rect(&self) -> Rect<TargetSpace, u32> {
+    pub fn rect(&self) -> Rect<RasterSpace, u32> {
         Rect::new(Point2::new(0, 0), Point2::new(self.width, self.height))
     }
 
-    pub fn set_pixel(&mut self, pixel: Point2<TargetSpace, u32>, colour: Colour) {
+    pub fn set_pixel(&mut self, pixel: Point2<RasterSpace, u32>, colour: Colour) {
         self.film.set(pixel.x as usize, pixel.y as usize, colour);
     }
 
@@ -46,7 +46,9 @@ impl Target {
                     (255.0 * pixel_colour.b) as u8,
                 ]);
 
-                image.put_pixel(x, y, colour);
+                // Raster space starts from bottom left and y goes up, but the image buffer starts
+                // from top left and y goes down.
+                image.put_pixel(x, self.height - y - 1, colour);
             }
         }
 
