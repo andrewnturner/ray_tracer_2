@@ -4,13 +4,13 @@ use crate::{
     texture::constant_texture::ConstantTexture,
 };
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum Texture {
     Constant(ConstantTexture),
 }
 
 impl Texture {
-    pub fn query(&self, texture_point: Point2<TextureSpace, f64>) -> Colour {
+    pub fn query(&self, _texture_point: Point2<TextureSpace, f64>) -> Colour {
         match self {
             Self::Constant(t) => t.colour,
         }

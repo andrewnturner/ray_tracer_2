@@ -6,10 +6,6 @@ pub struct Matrix4x4 {
 }
 
 impl Matrix4x4 {
-    pub fn from_array(m: [[f64; 4]; 4]) -> Self {
-        Self { m }
-    }
-
     pub fn identity() -> Self {
         let mut m = [[0.0; 4]; 4];
         m[0][0] = 1.0;
@@ -59,6 +55,13 @@ impl Matrix4x4 {
         }
 
         Self { m: inv }
+    }
+}
+
+#[cfg(test)]
+impl Matrix4x4 {
+    pub fn from_array(m: [[f64; 4]; 4]) -> Self {
+        Self { m }
     }
 
     pub fn is_close(&self, other: &Matrix4x4) -> bool {

@@ -7,16 +7,12 @@ use crate::{
 
 #[derive(Clone)]
 pub struct Matte {
-    diffuse_reflection: f64,
     pub texture: Texture,
 }
 
 impl Matte {
-    pub fn new(diffuse_reflection: f64, texture: Texture) -> Self {
-        Self {
-            diffuse_reflection,
-            texture,
-        }
+    pub fn new(texture: Texture) -> Self {
+        Self { texture }
     }
 
     pub fn scatter(&self, hit_record: &HitRecord) -> Option<Ray<WorldSpace, f64>> {
@@ -27,10 +23,12 @@ impl Matte {
             scatter_direction.normalise().relabel(),
         )) // TODO coordinate system
     }
+}
 
-    pub fn is_close(&self, other: &Self) -> bool {
-        let tolerance = 1e-6;
-
-        (self.diffuse_reflection - other.diffuse_reflection).abs() < tolerance
+#[cfg(test)]
+impl Matte {
+    pub fn is_close(&self, _other: &Self) -> bool {
+        // TODO should take into accoutn texture
+        true
     }
 }

@@ -75,10 +75,9 @@ mod tests {
 
     #[test]
     fn test_sphere_intersect_outside() {
-        let m = Material::Matte(Matte::new(
-            1.0,
-            Texture::Constant(ConstantTexture::new(Colour::new(1.0, 0.0, 0.0))),
-        ));
+        let m = Material::Matte(Matte::new(Texture::Constant(ConstantTexture::new(
+            Colour::new(1.0, 0.0, 0.0),
+        ))));
         let ray = Ray::new(Point3::new(-5.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
         let sphere = Sphere::new(1.0, m.clone());
 
@@ -96,10 +95,9 @@ mod tests {
 
     #[test]
     fn test_sphere_intersect_inside() {
-        let m = Material::Matte(Matte::new(
-            1.0,
-            Texture::Constant(ConstantTexture::new(Colour::new(1.0, 0.0, 0.0))),
-        ));
+        let m = Material::Matte(Matte::new(Texture::Constant(ConstantTexture::new(
+            Colour::new(1.0, 0.0, 0.0),
+        ))));
         let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
         let sphere = Sphere::new(2.0, m.clone());
 
@@ -120,10 +118,9 @@ mod tests {
         let ray = Ray::new(Point3::new(-5.0, 2.0, 0.0), Vector3::new(1.0, 0.0, 0.0));
         let sphere = Sphere::new(
             1.0,
-            Material::Matte(Matte::new(
-                1.0,
-                Texture::Constant(ConstantTexture::new(Colour::new(1.0, 0.0, 0.0))),
-            )),
+            Material::Matte(Matte::new(Texture::Constant(ConstantTexture::new(
+                Colour::new(1.0, 0.0, 0.0),
+            )))),
         );
 
         let hit = sphere.intersect(&ray);

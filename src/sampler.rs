@@ -3,8 +3,8 @@ use rand::{Rng, rng};
 use crate::{
     camera::Camera,
     geometry::{
-        Point2, Point3, Ray, Vector3,
-        space::{CameraSpace, RasterSpace, WorldSpace},
+        Point2, Ray,
+        space::{CameraSpace, RasterSpace},
     },
 };
 
@@ -62,11 +62,10 @@ impl<'a> Iterator for SampleIterator<'a> {
         );
         let ray = self.camera.generate_ray(target_point);
 
-        Some(Sample { target_point, ray })
+        Some(Sample { ray })
     }
 }
 
 pub struct Sample {
-    pub target_point: Point2<RasterSpace, f64>,
     pub ray: Ray<CameraSpace, f64>,
 }

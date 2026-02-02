@@ -1,7 +1,5 @@
 use std::{fmt, marker::PhantomData, ops::Add};
 
-use num_traits::Num;
-
 use crate::geometry::Vector3;
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
@@ -21,6 +19,7 @@ impl<S, T> Point2<S, T> {
     }
 }
 
+#[cfg(test)]
 impl<S> Point2<S, f64> {
     pub fn is_close(&self, other: &Point2<S, f64>) -> bool {
         let tolerance = 1e-6;
@@ -70,6 +69,7 @@ impl<S, T> Point3<S, T> {
     }
 }
 
+#[cfg(test)]
 impl<S> Point3<S, f64> {
     pub fn is_close(&self, other: &Point3<S, f64>) -> bool {
         let tolerance = 1e-6;

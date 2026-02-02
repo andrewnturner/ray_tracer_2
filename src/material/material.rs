@@ -23,6 +23,7 @@ impl Material {
     }
 }
 
+#[cfg(test)]
 impl Material {
     pub fn is_close(&self, other: &Self) -> bool {
         match self {

@@ -2,8 +2,8 @@ use std::f64::consts::PI;
 
 use crate::{
     geometry::{
-        Point2, Point3, Ray, Rect, Transform, Vector3,
-        space::{CameraSpace, IntermediateSpace, RasterSpace, ScreenSpace, WorldSpace},
+        Point2, Point3, Ray, Rect, Transform,
+        space::{CameraSpace, IntermediateSpace, RasterSpace, ScreenSpace},
     },
     raster::Raster,
 };
@@ -39,11 +39,6 @@ impl PerspectiveCamera {
         let p_raster = Point3::new(target_point.x, target_point.y, 0.0);
         let p_screen = self.screen_to_raster.clone().inverse() * p_raster;
         let p_camera = self.camera_to_screen.clone().inverse() * p_screen;
-
-        println!(
-            "target_point: {:?}, p_raster: {:?}, p_screen: {:?}, p_camera: {:?}",
-            target_point, p_raster, p_camera, p_screen
-        );
 
         let ray_camera = Ray::new(
             Point3::new(0.0, 0.0, 0.0),

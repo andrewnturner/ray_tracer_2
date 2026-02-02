@@ -1,6 +1,6 @@
 use crate::colour::Colour;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct ConstantTexture {
     pub colour: Colour,
 }

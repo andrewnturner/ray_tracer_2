@@ -30,30 +30,27 @@ use crate::texture::{ConstantTexture, Texture};
 fn build_demo_scene_and_camera(target: &Raster) -> (Scene, CameraInstance) {
     let blue_sphere = Element::Sphere(Sphere::new(
         4.0,
-        Material::Matte(Matte::new(
-            1.0,
-            Texture::Constant(ConstantTexture::new(Colour::new(0.0, 0.0, 1.0))),
-        )),
+        Material::Matte(Matte::new(Texture::Constant(ConstantTexture::new(
+            Colour::new(0.0, 0.0, 1.0),
+        )))),
     ));
     let blue_sphere_instance =
         ElementInstance::new(blue_sphere, Transform::translate(0.0, 4.0, 10.0));
 
     let red_sphere = Element::Sphere(Sphere::new(
         3.0,
-        Material::Matte(Matte::new(
-            1.0,
-            Texture::Constant(ConstantTexture::new(Colour::new(1.0, 0.0, 0.0))),
-        )),
+        Material::Matte(Matte::new(Texture::Constant(ConstantTexture::new(
+            Colour::new(1.0, 0.0, 0.0),
+        )))),
     ));
     let red_sphere_instance =
         ElementInstance::new(red_sphere, Transform::translate(7.0, 3.0, 10.0));
 
     let ground_sphere = Element::Sphere(Sphere::new(
         10.0,
-        Material::Matte(Matte::new(
-            1.0,
-            Texture::Constant(ConstantTexture::new(Colour::new(0.0, 1.0, 0.0))),
-        )),
+        Material::Matte(Matte::new(Texture::Constant(ConstantTexture::new(
+            Colour::new(0.0, 1.0, 0.0),
+        )))),
     ));
     let ground_sphere_instance =
         ElementInstance::new(ground_sphere, Transform::translate(0.0, -10.0, 10.0));
@@ -72,7 +69,6 @@ fn build_demo_scene_and_camera(target: &Raster) -> (Scene, CameraInstance) {
         Point2::new(-aspect_ratio, -1.0),
         Point2::new(aspect_ratio, 1.0),
     );
-    println!("screen: {:?}", screen);
 
     let camera = Camera::PerspectiveCamera(PerspectiveCamera::new(target, screen));
     let camera_instance = CameraInstance::new(camera, Transform::translate(1.0, 0.0, 0.0));

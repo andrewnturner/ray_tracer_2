@@ -32,6 +32,7 @@ impl HitRecord {
     }
 }
 
+#[cfg(test)]
 impl HitRecord {
     pub fn is_close(self, other: &HitRecord) -> bool {
         let tol = 1e-6;

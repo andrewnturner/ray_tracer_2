@@ -1,7 +1,7 @@
 use crate::{
     geometry::{Ray, space::ObjectSpace},
     hit_record::HitRecord,
-    scene::{ElementInstance, element::Element},
+    scene::ElementInstance,
 };
 
 pub struct ElementList {
