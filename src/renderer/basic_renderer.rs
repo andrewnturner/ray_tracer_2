@@ -62,8 +62,8 @@ impl Renderer for BasicRenderer {
     fn render(&self, scene: &Scene, camera_instance: &CameraInstance, target: &mut Raster) {
         let target_rect = target.rect();
 
-        for x in target_rect.top_left.x..target_rect.bottom_right.x {
-            for y in target_rect.top_left.y..target_rect.bottom_right.y {
+        for x in target_rect.bottom_left.x..target_rect.top_right.x {
+            for y in target_rect.bottom_left.y..target_rect.top_right.y {
                 let current_pixel = Point2::new(x, y);
 
                 let mut pixel_colour = Colour::zero();

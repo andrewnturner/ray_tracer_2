@@ -24,8 +24,8 @@ impl PerspectiveCamera {
                 1.0,
             ) * Transform::scale(1.0 / window.width(), 1.0 / window.height(), 1.0)
                 * Transform::<ScreenSpace, IntermediateSpace>::translate(
-                    -(window.top_left.x as f64),
-                    -(window.top_left.y as f64),
+                    -(window.bottom_left.x as f64),
+                    -(window.bottom_left.y as f64),
                     0.0,
                 );
 
